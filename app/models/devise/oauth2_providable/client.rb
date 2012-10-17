@@ -11,6 +11,13 @@ class Devise::Oauth2Providable::Client < ActiveRecord::Base
 
   attr_accessible :name, :website, :redirect_uri
 
+  def new_client_response
+    {
+      :client_id => identifier,
+      :client_secret => secret
+    }
+  end
+
   private
 
   def init_identifier

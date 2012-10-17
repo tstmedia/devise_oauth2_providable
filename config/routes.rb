@@ -4,4 +4,5 @@ Devise::Oauth2Providable::Engine.routes.draw do
   resources :authorizations, :only => :create
   match 'authorize' => 'authorizations#new'
   resource :token, :only => :create
+  resources :clients, :only => :create
 end
