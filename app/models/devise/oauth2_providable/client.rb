@@ -11,6 +11,17 @@ class Devise::Oauth2Providable::Client < ActiveRecord::Base
 
   attr_accessible :name, :website, :redirect_uri
 
+  scope :by_request, ->(request) {
+    token = nil
+    if request.env["HTTP_AUTHORIZATION"].present? && request.env["HTTP_AUTHORIZATION"].match(/^Bearer \w+/)
+      token = request.env["HTTP_AUTHORIZATION"].gsub /^Bearer /, ''
+    elsif request.params["access_token"].present? && request.params["access_token"].match(/\w+/)
+      token = request.params["access_token"]
+    end
+    joins(:access_tokens).
+      where(oauth2_access_tokens: { token: token })
+  }
+
   def new_client_response
     {
       :client_id => identifier,
