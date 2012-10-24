@@ -1,0 +1,4 @@
+<p>
+  <%= check_box_tag "scope[#{scope.name}]", '1', true %>
+  <%= label_tag "scope[#{scope.name}]", "#{scope.name.capitalize}: #{scope.description}" %>
+</p>

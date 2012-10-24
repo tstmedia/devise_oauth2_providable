@@ -1,14 +1,16 @@
 class Devise::Oauth2Providable::Scope
   attr_reader :raw_attributes
   attr_reader :name
+  attr_reader :description
 
   extend Enumerable # I know, right?
   def self.each
     scopes.values.each { |s| yield s }
   end
 
-  def self.[](key)
-    scopes[key]
+  def self.[](*keys)
+    final = keys.collect { |key| scopes[key] }.compact
+    final.length < 2 ? final.first : final
   end
 
   # TODO: Automate creation of the YAML for Scopes
@@ -18,8 +20,8 @@ class Devise::Oauth2Providable::Scope
 
   # TODO Switch name back to hash if we change the file to
   # associate more than a "name"
-  def self.file_as_list
-    @file_as_list ||= YAML.load_file file
+  def self.file_as_hash
+    @file_as_hash ||= YAML.load_file file
   end
 
   def self.names
@@ -31,14 +33,20 @@ class Devise::Oauth2Providable::Scope
   end
 
   def self.scopes
-    @scopes ||= file_as_list.inject({}.with_indifferent_access) do |hash, name|
-      hash[name] = new(name: name)
+    @scopes ||= file_as_hash.inject({}.with_indifferent_access) do |hash, list|
+      name = list[0]
+      options = { name: name }.merge(list[1])
+      hash[name] = new(options)
       hash
     end
   end
 
   def self.all
     scopes.values
+  end
+
+  def self.find_from_comma_delimiter(string)
+    string.is_a?(String) ? self.[](*string.split(",")) : []
   end
 
   def <=>(other)

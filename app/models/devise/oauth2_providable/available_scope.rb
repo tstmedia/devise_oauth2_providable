@@ -4,7 +4,10 @@ module Devise
       include EnumeratedField
       belongs_to :client
 
-      delegate :name, to: :scope
+      attr_accessible :scope_name
+
+      delegate :name, :description,
+        to: :scope
 
       enum_field :scope_name,
         Scope.names_for_enum
