@@ -1,0 +1,4 @@
+public:
+  description: Public readable stuff
+private:
+  description: Private stuff
