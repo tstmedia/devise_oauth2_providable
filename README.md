@@ -52,6 +52,8 @@ class User
     :oauth2_password_grantable,
     :oauth2_refresh_token_grantable,
     :oauth2_authorization_code_grantable
+
+  has_many :oauth2_enabled_scopes, class_name: "Devise::Oauth2Providable::EnabledScope"
 end
 ```
 
