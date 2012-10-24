@@ -1,5 +1,6 @@
 require 'devise'
 require 'rack/oauth2'
+require 'enumerated_field'
 require 'devise/oauth2_providable/engine'
 require 'devise/oauth2_providable/expirable_token'
 require 'devise/oauth2_providable/strategies/oauth2_providable_strategy'
