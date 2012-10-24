@@ -38,7 +38,7 @@ module Devise
             if params[:approve].present?
               case req.response_type
               when :code
-                Devise::Oauth2Providable::EnabledScope.create_or_change current_user, @client, req.params["scope"]
+                Devise::Oauth2Providable::EnabledScope.create_or_change current_user, @client, (req.params["scope"] || {})
                 authorization_code = current_user.authorization_codes.create!(:client => @client)
                 res.code = authorization_code.token
               when :token
