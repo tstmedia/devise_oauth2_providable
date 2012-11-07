@@ -3,7 +3,7 @@
     <p>
       <%= @client.name %> is requesting access to:
     </p>
-    <%= render partial: "scope_forms", collection: @scopes, as: :scope %>
+    <%= if @scopes.present? ? render partial: "scope_forms", collection: @scopes, as: :scope : "" %>
   <% end %>
   <%= hidden_field_tag :client_id, client.identifier %>
   <%= hidden_field_tag :response_type, response_type %>
