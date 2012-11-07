@@ -1,9 +1,9 @@
 <%= form_tag authorizations_path, :class => action do %>
-  <% if action == :approve %>
+  <% if @scopes.present? && action == :approve %>
     <p>
       <%= @client.name %> is requesting access to:
     </p>
-    <%= if @scopes.present? ? render partial: "scope_forms", collection: @scopes, as: :scope : "" %>
+    <%= render partial: "scope_forms", collection: @scopes, as: :scope %>
   <% end %>
   <%= hidden_field_tag :client_id, client.identifier %>
   <%= hidden_field_tag :response_type, response_type %>

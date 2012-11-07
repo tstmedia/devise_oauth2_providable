@@ -37,12 +37,12 @@ module Devise
         Rack::OAuth2::Server::Authorize.new do |req, res|
           @client = Client.find_by_identifier(req.client_id) || req.bad_request!
 
-          res.redirect_uri = @redirect_uri = @client.redirect_uri #= req.verify_redirect_uri!(@client.redirect_uri, :allow_partial_match)
+          res.redirect_uri = @redirect_uri = req.verify_redirect_uri!(@client.redirect_uri, :allow_partial_match)
           if allow_approval
             if params[:approve].present?
               case req.response_type
               when :code
-                #Devise::Oauth2Providable::EnabledScope.create_or_change current_user, @client, (req.params["scope"] || {})
+                Devise::Oauth2Providable::EnabledScope.create_or_change current_user, @client, (req.params["scope"] || {})
                 authorization_code = current_user.authorization_codes.create!(:client => @client)
                 res.code = authorization_code.token
               when :token
@@ -57,9 +57,9 @@ module Devise
             end
           else
             #TODO What if we end up no scopes or something?
-            #@scopes = @client.available_scopes.where({
-              #scope_name: Scope.find_from_comma_delimiter(req.scope.first).map(&:name)
-            #})
+            @scopes = @client.available_scopes.where({
+              scope_name: Scope.find_from_comma_delimiter(req.scope.first).map(&:name)
+            })
             @response_type = req.response_type
           end
         end
