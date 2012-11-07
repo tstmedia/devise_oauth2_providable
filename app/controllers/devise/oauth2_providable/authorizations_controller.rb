@@ -53,9 +53,9 @@ module Devise
             end
           else
             #TODO What if we end up no scopes or something?
-            @scopes = @client.available_scopes.where({
-              scope_name: Scope.find_from_comma_delimiter(req.scope.first).map(&:name)
-            })
+            #@scopes = @client.available_scopes.where({
+              #scope_name: Scope.find_from_comma_delimiter(req.scope.first).map(&:name)
+            #})
             @response_type = req.response_type
           end
         end
