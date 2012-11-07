@@ -5,7 +5,11 @@ module Devise
 
       rescue_from Rack::OAuth2::Server::Authorize::BadRequest do |e|
         @error = e
-        render :error, :status => e.status
+        respond_to do |f|
+          f.json { render :json => { metadata: {}, error: e, result: {} }.to_json }
+          f.xml { render :xml => { metadata: {}, error: e, result: {} }.to_xml }
+          f.html { render :error, :status => e.status }
+        end
       end
 
       def new
@@ -33,7 +37,7 @@ module Devise
         Rack::OAuth2::Server::Authorize.new do |req, res|
           @client = Client.find_by_identifier(req.client_id) || req.bad_request!
 
-          res.redirect_uri = @redirect_uri = req.verify_redirect_uri!(@client.redirect_uri)
+          res.redirect_uri = @redirect_uri #= req.verify_redirect_uri!(@client.redirect_uri, :allow_partial_match)
           if allow_approval
             if params[:approve].present?
               case req.response_type
