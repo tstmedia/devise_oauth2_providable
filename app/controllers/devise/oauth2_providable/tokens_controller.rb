@@ -1,6 +1,6 @@
 module Devise
   module Oauth2Providable
-    class TokensController
+    class TokensController < ApplicationController
       before_filter :authenticate_user!
       skip_before_filter :verify_authenticity_token, :only => :create
 
