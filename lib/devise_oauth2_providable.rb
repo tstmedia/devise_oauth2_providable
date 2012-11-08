@@ -28,15 +28,23 @@ module Devise
   end
 end
 
-Devise.add_module(:oauth2_providable,
-  :strategy => true,
-  :model => 'devise/oauth2_providable/models/oauth2_providable')
-Devise.add_module(:oauth2_password_grantable, 
-  :strategy => true,
-  :model => 'devise/oauth2_providable/models/oauth2_password_grantable')
-Devise.add_module(:oauth2_refresh_token_grantable, 
-  :strategy => true,
-  :model => 'devise/oauth2_providable/models/oauth2_refresh_token_grantable')
-Devise.add_module(:oauth2_authorization_code_grantable,
-  :strategy => true,
-  :model => 'devise/oauth2_providable/models/oauth2_authorization_code_grantable')
+Devise.setup do |config|
+  config.warden do |manager|
+    manager.default_strategies.unshift :oauth2_password_grantable
+    manager.default_strategies.unshift :oauth2_refresh_token_grantable
+    manager.default_strategies.unshift :oauth2_authorization_code_grantable
+    manager.default_strategies.unshift :oauth2_providable
+  end
+end
+#Devise.add_module(:oauth2_providable,
+  #:strategy => true,
+  #:model => 'devise/oauth2_providable/models/oauth2_providable')
+#Devise.add_module(:oauth2_password_grantable, 
+  #:strategy => true,
+  #:model => 'devise/oauth2_providable/models/oauth2_password_grantable')
+#Devise.add_module(:oauth2_refresh_token_grantable, 
+  #:strategy => true,
+  #:model => 'devise/oauth2_providable/models/oauth2_refresh_token_grantable')
+#Devise.add_module(:oauth2_authorization_code_grantable,
+  #:strategy => true,
+  #:model => 'devise/oauth2_providable/models/oauth2_authorization_code_grantable')
