@@ -10,8 +10,7 @@ class Devise::Oauth2Providable::AccessToken < ActiveRecord::Base
     response = {
       :access_token => token,
       :token_type => 'bearer',
-      :expires_in => expires_in,
-      :expires_at => expires_at
+      :expires_at => expires_at.to_i
     }
     response[:refresh_token] = refresh_token.token if refresh_token
     response
